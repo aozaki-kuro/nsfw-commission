@@ -53,17 +53,17 @@ const IllustratorInfo = ({
       enterTo="opacity-100"
     >
       <div className="flex flex-auto font-mono text-sm ss:text-xs">
-        <div className="">{formattedDate}</div>
+        <span className="">{formattedDate}</span>
         <span className="pr-16 ss:pr-6" />
-        <div className="">{Creator || '-'}</div>
-        <div className="grow text-right">
+        <span className="">{Creator || '-'}</span>
+        <span className="grow text-right">
           {'['}
           <span className="pr-3 ss:pr-2" />
           {createLink(Twitter, 'Twitter')}
           {createLink(Pixiv, 'Pixiv')}
           {createLink(Skeb, 'Skeb')}
           {']'}
-        </div>
+        </span>
       </div>
     </Transition>
   )
