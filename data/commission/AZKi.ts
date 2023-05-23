@@ -7,8 +7,8 @@ export const AZKi: Props[] = [
   {
     fileName: '20230515_そーだみず',
     Character: 'azki',
-    Twitter: 'https://twitter.com/so_dasui1',
-    Pixiv: 'https://www.pixiv.net/users/71942285',
+    Twitter: 'https://twitter.com/so_dasui1/status/1660644177183404035',
+    Pixiv: '',
     Skeb: ''
   }
 ]
