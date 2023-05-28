@@ -1,4 +1,4 @@
-import https from 'https'
+import axios from 'axios'
 import fs from 'fs'
 import path from 'path'
 import dotenv from 'dotenv'
@@ -21,8 +21,12 @@ console.log('\x1b[34m%s\x1b[0m', `Downloading`, `.../nsfw-cover.jpg`)
 const coverUrl = `https://${HOSTING}/nsfw-commission/nsfw-cover-s.jpg`
 const coverPath = './public/images/nsfw-cover.jpg'
 const coverStream = fs.createWriteStream(coverPath)
-https.get(coverUrl, res => {
-  res.pipe(coverStream)
+axios({
+  method: 'get',
+  url: coverUrl,
+  responseType: 'stream'
+}).then(res => {
+  res.data.pipe(coverStream)
   coverStream.on('finish', () => {
     coverStream.close()
   })
@@ -67,28 +71,27 @@ commissionFiles.forEach(filePath => {
 
         // Create directory if it doesn't already exist
         const dirPath = path.join('./public/images', character)
-        fs.mkdirSync(dirPath, { recursive: true })
+        if (!fs.existsSync(dirPath)) {
+          // check if directory exists before creating it
+          fs.mkdirSync(dirPath, { recursive: true })
+        }
 
         // Download the file
         const filePath = path.join(dirPath, `${fileName}.jpg`)
-        const fileStream = fs.createWriteStream(filePath)
+        const writer = fs.createWriteStream(filePath)
 
-        https
-          .get(downloadLink, res => {
-            if (res.statusCode === 404) {
-              console.error(
-                `Error: ${downloadLink} returned a 404 status code.`
-              )
-              process.exit(1)
-            }
-
-            res.pipe(fileStream)
-
-            fileStream.on('finish', () => {
-              fileStream.close()
+        axios({
+          method: 'get',
+          url: downloadLink,
+          responseType: 'stream'
+        })
+          .then(res => {
+            res.data.pipe(writer)
+            writer.on('finish', () => {
+              writer.close()
             })
           })
-          .on('error', err => {
+          .catch(err => {
             console.error(`Error: ${downloadLink} ${err.message}`)
             process.exit(1)
           })
