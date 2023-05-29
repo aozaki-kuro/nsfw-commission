@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { Transition } from '@headlessui/react'
 import { CommissionInfoProps } from 'CommissionInfoProps'
 
+// Create a functional component named IllustratorInfo which takes in props of type CommissionInfoProps
 const IllustratorInfo = ({
   PublishDate,
   Creator,
@@ -10,12 +11,13 @@ const IllustratorInfo = ({
   Skeb,
   Pixiv
 }: CommissionInfoProps) => {
-  // format the date
+  // Format the date with white space characters and set it to state using the useState hook
   const [formattedDate, setFormattedDate] = useState<string>(
     // For "20 /  /  "
-    '\u2000'.repeat(4) + '/' + '\u2000'.repeat(2) + '/' + '\u2000'.repeat(2)
+    '\u2000'.repeat(10)
   )
 
+  // Run an effect whenever the PublishDate prop changes. This effect converts the PublishDate string to a Date object, formats it as a string, and updates the formattedDate state.
   useEffect(() => {
     const date = new Date(
       `${PublishDate.slice(0, 4)}-${PublishDate.slice(
@@ -31,7 +33,7 @@ const IllustratorInfo = ({
     setFormattedDate(formattedDate)
   }, [PublishDate])
 
-  // create reusable function to generate links with proper styling
+  // Create a reusable function to generate links with proper styling
   const createLink = (url: string, text: string) => {
     return url ? (
       <>
@@ -43,7 +45,7 @@ const IllustratorInfo = ({
     ) : null
   }
 
-  // display illustrator information in a grid layout
+  // Render illustrator information in a grid layout using Tailwind CSS and the Transition component from HeadlessUI. This includes the formattedDate state, Creator prop (or '-' if there is no Creator), and links to the illustrator's social media pages (if they exist).
   return (
     <Transition
       appear={true}
@@ -69,4 +71,5 @@ const IllustratorInfo = ({
   )
 }
 
+// Export the IllustratorInfo component as the default export of this module.
 export default IllustratorInfo
