@@ -83,29 +83,30 @@ const Update = () => {
 
   // Render the update information in a Transition component that fades in when the component appears.
   return (
-    <Transition
-      appear={true}
-      show={true}
-      enter="transition-opacity duration-500"
-      enterFrom="opacity-0"
-      enterTo="opacity-100"
-    >
-      <div className="flex flex-auto font-mono text-sm ss:text-xs">
-        <p className="pr-2">Last update:</p>
+    <div className="flex flex-auto font-mono text-sm ss:text-xs">
+      <p className="pr-2">Last update:</p>
+      <Transition
+        appear={true}
+        show={true}
+        enter="transition-opacity duration-500"
+        enterFrom="opacity-0"
+        enterTo="opacity-100"
+      >
         <p className="pr-2">{formattedDate}</p>
-        {/* Display a link to scroll to the relevant character */}
-        <p className="">
-          [{' '}
-          <Link
-            href={'#' + `${kebabCase(fullName)}`}
-            className="underline-offset-[0.2rem]"
-          >
-            {fullName}
-          </Link>{' '}
-          ]
-        </p>
-      </div>
-    </Transition>
+      </Transition>
+
+      {/* Display a link to scroll to the relevant character */}
+      <p className="">
+        [{' '}
+        <Link
+          href={'#' + `${kebabCase(fullName)}`}
+          className="underline-offset-[0.2rem]"
+        >
+          {fullName}
+        </Link>{' '}
+        ]
+      </p>
+    </div>
   )
 }
 

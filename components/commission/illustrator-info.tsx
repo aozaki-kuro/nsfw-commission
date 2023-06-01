@@ -47,27 +47,27 @@ const IllustratorInfo = ({
 
   // Render illustrator information in a grid layout using Tailwind CSS and the Transition component from HeadlessUI. This includes the formattedDate state, Creator prop (or '-' if there is no Creator), and links to the illustrator's social media pages (if they exist).
   return (
-    <Transition
-      appear={true}
-      show={true}
-      enter="transition-opacity duration-500"
-      enterFrom="opacity-0"
-      enterTo="opacity-100"
-    >
-      <div className="flex flex-auto font-mono text-sm ss:text-xs">
+    <div className="flex flex-auto font-mono text-sm ss:text-xs">
+      <Transition
+        appear={true}
+        show={true}
+        enter="transition-opacity duration-500"
+        enterFrom="opacity-0"
+        enterTo="opacity-100"
+      >
         <span className="">{formattedDate}</span>
-        <span className="pr-16 ss:pr-6" />
-        <span className="">{Creator || '-'}</span>
-        <span className="grow text-right">
-          {'['}
-          <span className="pr-3 ss:pr-2" />
-          {createLink(Twitter, 'Twitter')}
-          {createLink(Pixiv, 'Pixiv')}
-          {createLink(Skeb, 'Skeb')}
-          {']'}
-        </span>
-      </div>
-    </Transition>
+      </Transition>
+      <span className="pr-16 ss:pr-6" />
+      <span className="">{Creator || '-'}</span>
+      <span className="grow text-right">
+        {'['}
+        <span className="pr-3 ss:pr-2" />
+        {createLink(Twitter, 'Twitter')}
+        {createLink(Pixiv, 'Pixiv')}
+        {createLink(Skeb, 'Skeb')}
+        {']'}
+      </span>
+    </div>
   )
 }
 
