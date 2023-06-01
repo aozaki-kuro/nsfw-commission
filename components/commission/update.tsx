@@ -1,6 +1,4 @@
 import Link from 'next/link'
-import { useState, useEffect } from 'react'
-import { Transition } from '@headlessui/react'
 
 import { commissionData } from '#data/CommissionData'
 import { charaDictionary } from '#data/CharaDictionary'
@@ -48,24 +46,10 @@ const Update = () => {
 
   // Extract the filename and character information from the latestEntry object, and format the date string.
   const rawDate = latestEntry.fileName.substring(0, 8)
-  const date = new Date(
-    `${rawDate.slice(0, 4)}-${rawDate.slice(4, 6)}-${rawDate.slice(6, 8)}`
-  )
-
-  const [formattedDate, setFormattedDate] = useState<string>(
-    '\u2000'.repeat(4) + '/' + '\u2000'.repeat(2) + '/' + '\u2000'.repeat(2)
-  )
-
-  // Use an effect hook to update the formattedDate state variable when the component mounts.
-  useEffect(() => {
-    setFormattedDate(
-      date?.toLocaleDateString(undefined, {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit'
-      })
-    )
-  }, [])
+  const formattedDate = `${rawDate.slice(0, 4)}/${rawDate.slice(
+    4,
+    6
+  )}/${rawDate.slice(6, 8)}`
 
   // Look up the full name of the character using the charaDictionary object based on their abbreviation.
   // The abbreviation is obtained from the latestEntry object processed in the previous code block.
@@ -83,29 +67,24 @@ const Update = () => {
 
   // Render the update information in a Transition component that fades in when the component appears.
   return (
-    <Transition
-      appear={true}
-      show={true}
-      enter="transition-opacity duration-500"
-      enterFrom="opacity-0"
-      enterTo="opacity-100"
-    >
-      <div className="flex flex-auto font-mono text-sm ss:text-xs">
-        <p className="pr-2">Last update:</p>
-        <p className="pr-2">{formattedDate}</p>
-        {/* Display a link to scroll to the relevant character */}
-        <p className="">
-          [{' '}
-          <Link
-            href={'#' + `${kebabCase(fullName)}`}
-            className="underline-offset-[0.2rem]"
-          >
-            {fullName}
-          </Link>{' '}
-          ]
-        </p>
-      </div>
-    </Transition>
+    <div className="flex flex-auto font-mono text-sm ss:text-xs">
+      <p className="pr-2">Last update:</p>
+      <p className="pr-2" suppressHydrationWarning={true}>
+        {formattedDate}
+      </p>
+
+      {/* Display a link to scroll to the relevant character */}
+      <p className="">
+        [{' '}
+        <Link
+          href={'#' + `${kebabCase(fullName)}`}
+          className="underline-offset-[0.2rem]"
+        >
+          {fullName}
+        </Link>{' '}
+        ]
+      </p>
+    </div>
   )
 }
 
