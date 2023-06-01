@@ -1,6 +1,5 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import Link from 'next/link'
-import { Transition } from '@headlessui/react'
 import { CommissionInfoProps } from 'CommissionInfoProps'
 
 // Create a functional component named IllustratorInfo which takes in props of type CommissionInfoProps
@@ -11,27 +10,11 @@ const IllustratorInfo = ({
   Skeb,
   Pixiv
 }: CommissionInfoProps) => {
-  // Format the date with white space characters and set it to state using the useState hook
-  const [formattedDate, setFormattedDate] = useState<string>(
-    // For "20 /  /  "
-    '\u2000'.repeat(10)
-  )
-
-  // Run an effect whenever the PublishDate prop changes. This effect converts the PublishDate string to a Date object, formats it as a string, and updates the formattedDate state.
-  useEffect(() => {
-    const date = new Date(
-      `${PublishDate.slice(0, 4)}-${PublishDate.slice(
-        4,
-        6
-      )}-${PublishDate.slice(6, 8)}`
-    )
-    const formattedDate = date.toLocaleDateString(undefined, {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit'
-    })
-    setFormattedDate(formattedDate)
-  }, [PublishDate])
+  // Format the date to YYYY/MM/DD
+  const formattedDate = `${PublishDate.slice(0, 4)}/${PublishDate.slice(
+    4,
+    6
+  )}/${PublishDate.slice(6, 8)}`
 
   // Create a reusable function to generate links with proper styling
   const createLink = (url: string, text: string) => {
@@ -48,15 +31,7 @@ const IllustratorInfo = ({
   // Render illustrator information in a grid layout using Tailwind CSS and the Transition component from HeadlessUI. This includes the formattedDate state, Creator prop (or '-' if there is no Creator), and links to the illustrator's social media pages (if they exist).
   return (
     <div className="flex flex-auto font-mono text-sm ss:text-xs">
-      <Transition
-        appear={true}
-        show={true}
-        enter="transition-opacity duration-500"
-        enterFrom="opacity-0"
-        enterTo="opacity-100"
-      >
-        <span className="">{formattedDate}</span>
-      </Transition>
+      <span className="">{formattedDate}</span>
       <span className="pr-16 ss:pr-6" />
       <span className="">{Creator || '-'}</span>
       <span className="grow text-right">
