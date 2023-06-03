@@ -23,7 +23,7 @@ const renderCommission = (commission: CommissionInfoProps) => (
   </div>
 )
 
-// Define the Listing component which takes in a props object of type Props. This component retrieves relevant commission data using the Character prop, renders the commission items, and either shows or hides additional commissions based on the number of total commissions.
+// Define the Listing component which takes in a props object of type Props. This component retrieves relevant commission data using the Character prop, renders the commission items, and displays all commissions at once.
 const Listing = ({ Character }: Props) => {
   // Retrieve all commissions for the chosen character from the commissionData object,
   // convert their filenames to PublishDate and Creator values, and sort them by date (newest first).
@@ -44,21 +44,7 @@ const Listing = ({ Character }: Props) => {
     return <p>To be announced ...</p>
   }
 
-  // Display the newest three commissions and add a details/summary element to show additional commissions if necessary.
-  const newestCommissions = commissions.slice(0, 3)
-
-  return (
-    <>
-      {newestCommissions.map(renderCommission)}
-      {/* If there are more than three commissions, display them in an expandable/collapsible list */}
-      {commissions.length > newestCommissions.length && (
-        <details className="pt-8">
-          <summary>Click to display more other works</summary>
-          {commissions.slice(newestCommissions.length).map(renderCommission)}
-        </details>
-      )}
-    </>
-  )
+  return <>{commissions.map(renderCommission)}</>
 }
 
 // Export the Listing component as the default export of this module
