@@ -21,7 +21,7 @@ if (!fs.existsSync(publicDirPath)) {
 }
 
 // Download cover image to the given path and log success to the console
-console.log('\x1b[42m%s\x1b[0m', ` Downloading `, `.../nsfw-cover.jpg`)
+console.log('\x1b[42m%s\x1b[0m', ' Downloading ', 'nsfw - cover.jpg')
 const coverUrl = `https://${HOSTING}/nsfw-commission/nsfw-cover-s.jpg`
 const coverPath = './public/images/nsfw-cover.jpg'
 const coverStream = fs.createWriteStream(coverPath)
@@ -71,8 +71,8 @@ commissionFiles.forEach(filePath => {
         const downloadLink = `https://${HOSTING}/nsfw-commission/${character}/${fileName}.jpg`
         console.log(
           '\x1b[44m%s\x1b[0m',
-          ` Downloading `,
-          `.../${character}/${fileName}.jpg`
+          ' Downloading ',
+          `${character}/${fileName}.jpg`
         )
 
         // Create path to directory and check if it exists, create it otherwise
