@@ -17,5 +17,12 @@ export const AZKi: Props[] = [
     Twitter: '',
     Pixiv: 'https://www.fanbox.cc/@hv-yantaro/posts/6073423',
     Skeb: 'https://skeb.jp/@hcz_n/works/50'
+  },
+  {
+    fileName: '20230603_うたゆうか',
+    Character: 'azki',
+    Twitter: 'https://twitter.com/YuukaUta/status/1665328780427296770',
+    Pixiv: 'https://www.pixiv.net/artworks/108727689',
+    Skeb: 'https://skeb.jp/@YuukaUta/works/79'
   }
 ]
