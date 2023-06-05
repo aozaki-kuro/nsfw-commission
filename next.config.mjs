@@ -16,13 +16,7 @@ export default withNextra({
   eslint: {
     ignoreDuringBuilds: true
   },
-  async redirects() {
-    return [
-      {
-        source: '/commission',
-        destination: '/',
-        permanent: true
-      }
-    ]
-  }
+  ...(process.env.CF_PAGES === 'true'
+    ? { output: 'export' } // Use static output for Cloudflare Pages
+    : null)
 })
