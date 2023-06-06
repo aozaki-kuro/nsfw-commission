@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { CommissionInfoProps } from 'CommissionInfoProps'
+import { CommissionInfoProps } from './types'
 
 // Create a functional component named IllustratorInfo which takes in props of type CommissionInfoProps
 const IllustratorInfo = ({

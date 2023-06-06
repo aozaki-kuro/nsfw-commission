@@ -1,4 +1,4 @@
-import { Props } from 'CommissionDataProps'
+import { Props } from '#data/types'
 
 // Active
 import { AZKi } from '#data/commission/AZKi'
