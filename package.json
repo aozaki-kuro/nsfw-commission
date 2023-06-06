@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "lint-fix": "next lint --fix",
-    "prebuild": "ts-node scripts/dl.ts",
+    "prebuild": "node scripts/dl.mjs",
     "production": "pnpm prebuild && next build",
     "prepare": "husky install"
   },
@@ -43,8 +43,6 @@
     "lint-staged": "^13.2.2",
     "prettier": "^2.8.8",
     "prettier-plugin-tailwindcss": "^0.3.0",
-    "ts-node": "^10.9.1",
-    "tsconfig-paths": "^4.2.0",
     "typescript": "^5.1.3"
   },
   "prettier": {
