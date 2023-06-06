@@ -3,6 +3,7 @@ import axios from 'axios'
 import fs from 'fs'
 import path from 'path'
 import dotenv from 'dotenv'
+import { exit } from 'process'
 
 // Set HOSTING environment variable to either dotenv or process.env methods
 const HOSTING =
@@ -11,7 +12,7 @@ const HOSTING =
   (() => {
     // If host is undefined, log error message and exit program
     console.error('DL links not set correctly in the environment or .env')
-    process.exit(1)
+    exit(1)
   })()
 
 // Create a directory path to public/images and check if it exists, create it otherwise
@@ -25,16 +26,22 @@ console.log('\x1b[42m%s\x1b[0m', ' Downloading ', 'nsfw - cover.jpg')
 const coverUrl = `https://${HOSTING}/nsfw-commission/nsfw-cover-s.jpg`
 const coverPath = './public/images/nsfw-cover.jpg'
 const coverStream = fs.createWriteStream(coverPath)
+
 axios({
   method: 'get',
   url: coverUrl,
   responseType: 'stream'
-}).then(res => {
-  res.data.pipe(coverStream)
-  coverStream.on('finish', () => {
-    coverStream.close()
-  })
 })
+  .then(res => {
+    res.data.pipe(coverStream)
+    coverStream.on('finish', () => {
+      coverStream.close()
+    })
+  })
+  .catch(err => {
+    console.error(`Error: ${err.message}`)
+    exit(1)
+  })
 
 // Set the commission directory path and get all the files and sub-directory paths recursively
 const commissionDirPath = './data/commission'
@@ -98,7 +105,7 @@ commissionFiles.forEach(filePath => {
           })
           .catch(err => {
             console.error(`Error: ${downloadLink} ${err.message}`)
-            process.exit(1)
+            exit(1)
           })
 
         // Reset variables
@@ -110,10 +117,8 @@ commissionFiles.forEach(filePath => {
 })
 
 // Recursive function to get all file names in the directory path provided
-function getAllFiles(dirPath, arrayOfFiles) {
+function getAllFiles(dirPath: string, arrayOfFiles: string[] = []): string[] {
   const files = fs.readdirSync(dirPath)
-
-  arrayOfFiles = arrayOfFiles || []
 
   files.forEach(file => {
     if (fs.statSync(path.join(dirPath, file)).isDirectory()) {

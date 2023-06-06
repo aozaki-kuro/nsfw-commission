@@ -30,7 +30,8 @@
       "module": "CommonJS",
       "paths": {
         "#data/*": ["data/*"],
-        "#images/*": ["public/images/*"]
+        "#images/*": ["public/images/*"],
+        "#scripts/*": ["scripts/*"]
       }
     },
     "require": ["tsconfig-paths/register"]

@@ -10,3 +10,5 @@ public/images/
 *.tar.gz
 
 .env
+
+scripts/dl.js
