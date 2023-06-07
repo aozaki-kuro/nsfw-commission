@@ -1,8 +1,8 @@
 // Import required modules
 import axios from 'axios'
-import * as fs from 'fs'
-import * as path from 'path'
-import * as dotenv from 'dotenv'
+import fs from 'fs'
+import path from 'path'
+import dotenv from 'dotenv'
 import { exit } from 'process'
 
 // Set HOSTING environment variable to either dotenv or process.env methods
@@ -22,7 +22,7 @@ if (!fs.existsSync(publicDirPath)) {
 }
 
 // Download cover image to the given path and log success to the console
-console.log('\x1b[42m%s\x1b[0m', ' Downloading ', 'nsfw - cover.jpg')
+console.log('\x1b[42m%s\x1b[0m', ' Downloading ', 'nsfw-cover.jpg')
 const coverUrl = `https://${HOSTING}/nsfw-commission/nsfw-cover-s.jpg`
 const coverPath = './public/images/nsfw-cover.jpg'
 const coverStream = fs.createWriteStream(coverPath)
