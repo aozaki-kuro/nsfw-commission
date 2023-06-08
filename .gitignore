@@ -12,3 +12,4 @@ public/images/
 .env
 
 scripts/dl.js
+.turbo
