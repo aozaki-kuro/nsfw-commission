@@ -14,7 +14,7 @@ export const AZKi: Props[] = [
   {
     fileName: '20230527_病ん太廊',
     Character: 'azki',
-    Twitter: '',
+    Twitter: 'https://twitter.com/hcz_n/status/1663893329963286533',
     Pixiv: 'https://www.fanbox.cc/@hv-yantaro/posts/6073423',
     Skeb: 'https://skeb.jp/@hcz_n/works/50'
   },
