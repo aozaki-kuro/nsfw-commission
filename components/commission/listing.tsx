@@ -1,7 +1,7 @@
 // Import necessary modules and components
+import { commissionData } from '#data/CommissionData'
 import Image from 'next/image'
 import IllustratorInfo from './illustrator-info'
-import { commissionData } from '#data/CommissionData'
 import { CommissionInfoProps } from './types'
 
 // Define an interface to describe the component's expected props

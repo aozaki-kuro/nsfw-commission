@@ -8,11 +8,7 @@ const YEAR = new Date().getFullYear()
 
 // Nextra blog theme config
 export default {
-  head: ({
-    meta
-  }: {
-    meta: { title: string; description: string; image: string }
-  }) => {
+  head: ({ meta }: { meta: { title: string; description: string; image: string } }) => {
     // Get Current Title
     const currentTitle = Site
 
@@ -44,33 +40,13 @@ export default {
         <meta name="application-name" content={Site} />
         <meta name="apple-mobile-web-app-title" content={Site} />
         <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="32x32"
-          href="/icons/favicon-32x32.png"
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="16x16"
-          href="/icons/favicon-16x16.png"
-        />
+        <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png" />
         <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
-        <link
-          rel="mask-icon"
-          href="/icons/safari-pinned-tab.svg"
-          color="#6fa8dc"
-        />
+        <link rel="mask-icon" href="/icons/safari-pinned-tab.svg" color="#6fa8dc" />
 
         {/* SEO : RSS */}
-        <link
-          rel="feed"
-          href="/index.xml"
-          type="application/rss+xml"
-          title={Site}
-          className=""
-        />
+        <link rel="feed" href="/index.xml" type="application/rss+xml" title={Site} className="" />
       </>
     )
   },

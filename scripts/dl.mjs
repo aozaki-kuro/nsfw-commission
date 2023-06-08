@@ -1,8 +1,8 @@
 // Import required modules
 import axios from 'axios'
+import dotenv from 'dotenv'
 import fs from 'fs'
 import path from 'path'
-import dotenv from 'dotenv'
 
 // Set HOSTING environment variable to either dotenv or process.env methods
 const HOSTING =
@@ -69,11 +69,7 @@ commissionFiles.forEach(filePath => {
       // If both variables are set, create a download link for the image and save it to the public folder
       if (fileName && character) {
         const downloadLink = `https://${HOSTING}/nsfw-commission/${character}/${fileName}.jpg`
-        console.log(
-          '\x1b[44m%s\x1b[0m',
-          ' Downloading ',
-          `${character}/${fileName}.jpg`
-        )
+        console.log('\x1b[44m%s\x1b[0m', ' Downloading ', `${character}/${fileName}.jpg`)
 
         // Create path to directory and check if it exists, create it otherwise
         const dirPath = path.join('./public/images', character)

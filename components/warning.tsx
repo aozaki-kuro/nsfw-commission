@@ -1,7 +1,7 @@
 // Import required modules and components from libraries
 import { Dialog, Transition } from '@headlessui/react'
-import { Fragment, useEffect, useState } from 'react'
 import Image from 'next/image'
+import { Fragment, useEffect, useState } from 'react'
 
 // Function to redirect user to Google on Leave Now button click
 function leave() {
@@ -49,11 +49,7 @@ export default function MyModal() {
   return (
     <>
       <Transition appear show={isOpen} as={Fragment}>
-        <Dialog
-          as="div"
-          className="relative z-10"
-          onClose={() => setIsOpen(true)}
-        >
+        <Dialog as="div" className="relative z-10" onClose={() => setIsOpen(true)}>
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"

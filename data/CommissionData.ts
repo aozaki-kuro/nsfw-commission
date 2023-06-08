@@ -2,8 +2,8 @@ import { Props } from '#data/types'
 
 // Active
 import { AZKi } from '#data/commission/AZKi'
-import { Lucia } from '#data/commission/Lucia'
 import { Ina } from '#data/commission/Ina'
+import { Lucia } from '#data/commission/Lucia'
 
 // Misc
 import { Misc } from './commission/Misc'

@@ -1,8 +1,12 @@
+/*
+ * Install and use with `pnpm i -D ts-node`
+ */
+
 // Import required modules
 import axios from 'axios'
+import dotenv from 'dotenv'
 import fs from 'fs'
 import path from 'path'
-import dotenv from 'dotenv'
 import { exit } from 'process'
 
 // Set HOSTING environment variable to either dotenv or process.env methods
@@ -110,11 +114,7 @@ commissionFiles.forEach(filePath => {
             })
           })
           .catch(err => {
-            console.error(
-              '\x1b[41m%s\x1b[0m',
-              ' FAIL ',
-              `${downloadLink} ${err.message}`
-            )
+            console.error('\x1b[41m%s\x1b[0m', ' FAIL ', `${downloadLink} ${err.message}`)
             exit(1)
           })
 

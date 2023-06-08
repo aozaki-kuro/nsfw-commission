@@ -1,7 +1,7 @@
 import Link from 'next/link'
 
-import { commissionData } from '#data/CommissionData'
 import { charaDictionary } from '#data/CharaDictionary'
+import { commissionData } from '#data/CommissionData'
 
 // Define the shape of an object needed to store information about the latest update
 type LatestEntry = {
@@ -46,24 +46,17 @@ const Update = () => {
 
   // Extract the filename and character information from the latestEntry object, and format the date string.
   const rawDate = latestEntry.fileName.substring(0, 8)
-  const formattedDate = `${rawDate.slice(0, 4)}/${rawDate.slice(
-    4,
-    6
-  )}/${rawDate.slice(6, 8)}`
+  const formattedDate = `${rawDate.slice(0, 4)}/${rawDate.slice(4, 6)}/${rawDate.slice(6, 8)}`
 
   // Look up the full name of the character using the charaDictionary object based on their abbreviation.
   // The abbreviation is obtained from the latestEntry object processed in the previous code block.
   const { Character } = latestEntry
 
   // Find a dictionary entry in charaDictionary whose "Abbr" property matches the current character's abbreviation
-  const dictionaryEntry = charaDictionary.find(
-    chara => chara.Abbr === Character
-  )
+  const dictionaryEntry = charaDictionary.find(chara => chara.Abbr === Character)
 
   // If a dictionary entry was found, set fullName to its "FullName" property. Otherwise, set it to the lowercase version of the abbreviation.
-  const fullName = dictionaryEntry
-    ? dictionaryEntry.FullName
-    : Character.toLowerCase()
+  const fullName = dictionaryEntry ? dictionaryEntry.FullName : Character.toLowerCase()
 
   // Render the update information in a Transition component that fades in when the component appears.
   return (
@@ -76,10 +69,7 @@ const Update = () => {
       {/* Display a link to scroll to the relevant character */}
       <p className="">
         [{' '}
-        <Link
-          href={'#' + `${kebabCase(fullName)}`}
-          className="underline-offset-[0.2rem]"
-        >
+        <Link href={'#' + `${kebabCase(fullName)}`} className="underline-offset-[0.2rem]">
           {fullName}
         </Link>{' '}
         ]
