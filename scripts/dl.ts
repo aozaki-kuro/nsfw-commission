@@ -5,56 +5,62 @@ import path from 'path'
 import dotenv from 'dotenv'
 import { exit } from 'process'
 
-// Get the hosting URL from environment variables or .env file
-const HOSTING = getHosting()
-
-// Directory path to save cover image and downloaded images
-const publicDirPath = './public/images'
-
-// Create the publicDirPath if it doesn't exist and download the cover image
-ensureDirectory(publicDirPath)
-downloadCoverImage()
-
-// Directory path containing commission files, get all files and process each file
-const commissionDirPath = './data/commission'
-const commissionFiles = getAllFiles(commissionDirPath)
-
-// Filter only .ts files and process them
-commissionFiles
-  .filter(file => path.extname(file) === '.ts')
-  .forEach(filePath => processFile(filePath))
-
-function getHosting() {
-  // Load environment variables from .env file
-  const hosting = dotenv.config().parsed?.HOSTING || process.env.HOSTING
-  // Exit with an error if the hosting URL is not defined
-  if (!hosting) {
+// Set HOSTING environment variable to either dotenv or process.env methods
+const HOSTING =
+  dotenv.config().parsed?.HOSTING ||
+  process.env.HOSTING ||
+  (() => {
+    // If host is undefined, log error message and exit program
     console.error(
-      '\x1b[42m%s\x1b[0m',
-      ' Error ',
+      '\x1b[41m%s\x1b[0m',
+      ' FAIL ',
       'DL links not set correctly in the environment or .env'
     )
     exit(1)
+  })()
+
+// Create a directory path to public/images and check if it exists, create it otherwise
+const publicDirPath = './public/images'
+if (!fs.existsSync(publicDirPath)) {
+  fs.mkdirSync(publicDirPath)
+}
+
+// Download cover image to the given path and log success to the console
+const coverUrl = `https://${HOSTING}/nsfw-commission/nsfw-cover-s.jpg`
+const coverPath = './public/images/nsfw-cover.jpg'
+const coverStream = fs.createWriteStream(coverPath)
+
+axios({
+  method: 'get',
+  url: coverUrl,
+  responseType: 'stream'
+})
+  .then(res => {
+    res.data.pipe(coverStream)
+    coverStream.on('finish', () => {
+      coverStream.close()
+      checkDownloadsCompleted()
+    })
+  })
+  .catch(err => {
+    console.error(`Error: ${err.message}`)
+    exit(1)
+  })
+
+// Set the commission directory path and get all the files and sub-directory paths recursively
+const commissionDirPath = './data/commission'
+const commissionFiles = getAllFiles(commissionDirPath)
+
+// Keep track of completed downloads
+let completedDownloads = 0
+
+// Loop through each file and check if it is a .ts file
+commissionFiles.forEach(filePath => {
+  if (path.extname(filePath) !== '.ts') {
+    return
   }
-  return hosting
-}
 
-function ensureDirectory(dirPath: string) {
-  // Create directory recursively if it doesn't exist
-  if (!fs.existsSync(dirPath)) {
-    fs.mkdirSync(dirPath, { recursive: true })
-  }
-}
-
-function downloadCoverImage() {
-  // Download the cover image to publicDirPath/nsfw-cover.jpg
-  const coverUrl = `https://${HOSTING}/nsfw-commission/nsfw-cover-s.jpg`
-  const coverPath = path.join(publicDirPath, 'nsfw-cover.jpg')
-  downloadImage(coverUrl, coverPath)
-}
-
-function processFile(filePath: string) {
-  // Read the file and extract the character name and file name
+  // Read file data, split it into separate lines and set variables for file name and character
   fs.readFile(filePath, 'utf8', (err, data) => {
     if (err) {
       console.error(err)
@@ -65,6 +71,7 @@ function processFile(filePath: string) {
     let fileName = ''
     let character = ''
 
+    // Loop through each line of the file and set variables accordingly
     lines.forEach(line => {
       if (line.includes('fileName:')) {
         fileName = line.split("'")[1]
@@ -73,48 +80,54 @@ function processFile(filePath: string) {
         character = line.split("'")[1]
       }
 
+      // If both variables are set, create a download link for the image and save it to the public folder
       if (fileName && character) {
-        // Create directory recursively if it doesn't exist
-        const dirPath = path.join(publicDirPath, character)
-        ensureDirectory(dirPath)
-
-        // Download image to publicDirPath/character/file.jpg
-        const filePath = path.join(dirPath, `${fileName}.jpg`)
         const downloadLink = `https://${HOSTING}/nsfw-commission/${character}/${fileName}.jpg`
-        downloadImage(downloadLink, filePath)
 
-        // Reset variables for next file
+        // Create path to directory and check if it exists, create it otherwise
+        const dirPath = path.join('./public/images', character)
+        if (!fs.existsSync(dirPath)) {
+          fs.mkdirSync(dirPath, { recursive: true })
+        }
+
+        // Set file path and download the image using axios and stream it to a writer object
+        const filePath = path.join(dirPath, `${fileName}.jpg`)
+        const writer = fs.createWriteStream(filePath)
+
+        axios({
+          method: 'get',
+          url: downloadLink,
+          responseType: 'stream'
+        })
+          .then(res => {
+            res.data.pipe(writer)
+            writer.on('finish', () => {
+              writer.close()
+              completedDownloads++
+              if (completedDownloads === commissionFiles.length) {
+                checkDownloadsCompleted()
+              }
+            })
+          })
+          .catch(err => {
+            console.error(
+              '\x1b[41m%s\x1b[0m',
+              ' FAIL ',
+              `${downloadLink} ${err.message}`
+            )
+            exit(1)
+          })
+
+        // Reset variables
         fileName = ''
         character = ''
       }
     })
   })
-}
+})
 
-function downloadImage(url: string, filePath: string) {
-  // Download an image from the specified URL and save it to the specified file path
-  const writer = fs.createWriteStream(filePath)
-  axios({
-    method: 'get',
-    url: url,
-    responseType: 'stream'
-  })
-    .then(res => {
-      res.data.pipe(writer)
-      writer.on('finish', () => writer.close())
-    })
-    .catch(err => {
-      console.error(
-        '\x1b[42m%s\x1b[0m',
-        ' Error ',
-        `${filePath} ${err.message}`
-      )
-      exit(1)
-    })
-}
-
+// Recursive function to get all file names in the directory path provided
 function getAllFiles(dirPath: string, arrayOfFiles: string[] = []): string[] {
-  // Get all files recursively in a directory
   const files = fs.readdirSync(dirPath)
 
   files.forEach(file => {
@@ -126,4 +139,11 @@ function getAllFiles(dirPath: string, arrayOfFiles: string[] = []): string[] {
   })
 
   return arrayOfFiles
+}
+
+// Function to check if all downloads are completed
+function checkDownloadsCompleted() {
+  if (completedDownloads === commissionFiles.length) {
+    console.log('\x1b[42m%s\x1b[0m', ' DONE ', 'All downloads completed.')
+  }
 }
