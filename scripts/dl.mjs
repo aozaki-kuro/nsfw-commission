@@ -10,7 +10,11 @@ const HOSTING =
   process.env.HOSTING ||
   (() => {
     // If host is undefined, log error message and exit program
-    console.error('DL links not set correctly in the environment or .env')
+    console.error(
+      '\x1b[41m%s\x1b[0m',
+      ' FAIL ',
+      'DL links not set correctly in the environment or .env'
+    )
     process.exit(1)
   })()
 
@@ -21,24 +25,33 @@ if (!fs.existsSync(publicDirPath)) {
 }
 
 // Download cover image to the given path and log success to the console
-console.log('\x1b[42m%s\x1b[0m', ' Downloading ', 'nsfw-cover.jpg')
 const coverUrl = `https://${HOSTING}/nsfw-commission/nsfw-cover-s.jpg`
 const coverPath = './public/images/nsfw-cover.jpg'
 const coverStream = fs.createWriteStream(coverPath)
+
 axios({
   method: 'get',
   url: coverUrl,
   responseType: 'stream'
-}).then(res => {
-  res.data.pipe(coverStream)
-  coverStream.on('finish', () => {
-    coverStream.close()
-  })
 })
+  .then(res => {
+    res.data.pipe(coverStream)
+    coverStream.on('finish', () => {
+      coverStream.close()
+      checkDownloadsCompleted()
+    })
+  })
+  .catch(err => {
+    console.error(`Error: ${err.message}`)
+    process.exit(1)
+  })
 
 // Set the commission directory path and get all the files and sub-directory paths recursively
 const commissionDirPath = './data/commission'
 const commissionFiles = getAllFiles(commissionDirPath)
+
+// Keep track of completed downloads
+let completedDownloads = 0
 
 // Loop through each file and check if it is a .ts file
 commissionFiles.forEach(filePath => {
@@ -69,7 +82,6 @@ commissionFiles.forEach(filePath => {
       // If both variables are set, create a download link for the image and save it to the public folder
       if (fileName && character) {
         const downloadLink = `https://${HOSTING}/nsfw-commission/${character}/${fileName}.jpg`
-        console.log('\x1b[44m%s\x1b[0m', ' Downloading ', `${character}/${fileName}.jpg`)
 
         // Create path to directory and check if it exists, create it otherwise
         const dirPath = path.join('./public/images', character)
@@ -90,10 +102,14 @@ commissionFiles.forEach(filePath => {
             res.data.pipe(writer)
             writer.on('finish', () => {
               writer.close()
+              completedDownloads++
+              if (completedDownloads === commissionFiles.length) {
+                checkDownloadsCompleted()
+              }
             })
           })
           .catch(err => {
-            console.error(`Error: ${downloadLink} ${err.message}`)
+            console.error('\x1b[41m%s\x1b[0m', ' FAIL ', `${downloadLink} ${err.message}`)
             process.exit(1)
           })
 
@@ -106,10 +122,8 @@ commissionFiles.forEach(filePath => {
 })
 
 // Recursive function to get all file names in the directory path provided
-function getAllFiles(dirPath, arrayOfFiles) {
+function getAllFiles(dirPath, arrayOfFiles = []) {
   const files = fs.readdirSync(dirPath)
-
-  arrayOfFiles = arrayOfFiles || []
 
   files.forEach(file => {
     if (fs.statSync(path.join(dirPath, file)).isDirectory()) {
@@ -120,4 +134,11 @@ function getAllFiles(dirPath, arrayOfFiles) {
   })
 
   return arrayOfFiles
+}
+
+// Function to check if all downloads are completed
+function checkDownloadsCompleted() {
+  if (completedDownloads === commissionFiles.length) {
+    console.log('\x1b[42m%s\x1b[0m', ' DONE ', 'All downloads completed.')
+  }
 }
