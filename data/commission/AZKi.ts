@@ -24,5 +24,12 @@ export const AZKi: Props[] = [
     Twitter: 'https://twitter.com/YuukaUta/status/1665328780427296770',
     Pixiv: 'https://www.pixiv.net/artworks/108727689',
     Skeb: 'https://skeb.jp/@YuukaUta/works/79'
+  },
+  {
+    fileName: '20230611_病ん太廊',
+    Character: 'azki',
+    Twitter: '',
+    Pixiv: '',
+    Skeb: 'https://skeb.jp/@hcz_n/works/51'
   }
 ]
