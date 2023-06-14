@@ -9,5 +9,6 @@ export const charaDictionary: Chara[] = [
   {
     Abbr: 'ina',
     FullName: "Ninomae Ina'Nis"
-  }
+  },
+  { Abbr: 'misc', FullName: 'Misc' }
 ]
