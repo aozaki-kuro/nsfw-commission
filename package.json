@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "lint-fix": "next lint --fix",
-    "prebuild": "node scripts/dl.mjs",
+    "prebuild": "tsx scripts/dl.ts",
     "prod": "pnpm prebuild && pnpm build",
     "prepare": "husky install"
   },
