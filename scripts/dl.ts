@@ -1,149 +1,99 @@
-/*
- * Install and use with `pnpm i -D ts-node`
- */
-
-// Import required modules
-import axios from 'axios'
+import { commissionData } from '#data/CommissionData'
 import dotenv from 'dotenv'
 import fs from 'fs'
+import https from 'https'
 import path from 'path'
-import { exit } from 'process'
 
-// Set HOSTING environment variable to either dotenv or process.env methods
-const HOSTING =
-  dotenv.config().parsed?.HOSTING ||
-  process.env.HOSTING ||
-  (() => {
-    // If host is undefined, log error message and exit program
-    console.error(
-      '\x1b[41m%s\x1b[0m',
-      ' FAIL ',
-      'DL links not set correctly in the environment or .env'
-    )
-    exit(1)
-  })()
+// Load environment variables from .env file
+dotenv.config()
 
-// Create a directory path to public/images and check if it exists, create it otherwise
-const publicDirPath = './public/images'
-if (!fs.existsSync(publicDirPath)) {
-  fs.mkdirSync(publicDirPath)
+// Validate HOSTING environment variable
+const HOSTING = process.env.HOSTING
+if (!HOSTING) {
+  console.error(
+    '\x1b[41m%s\x1b[0m',
+    ' FAIL ',
+    'DL links not set correctly in the environment or .env'
+  )
+  process.exit(1)
 }
 
-// Download cover image to the given path and log success to the console
+// Create the directory for storing downloaded images if it doesn't exist
+const publicDirPath = './public/images'
+fs.mkdirSync(publicDirPath, { recursive: true })
+
+// Download cover image and handle completion
 const coverUrl = `https://${HOSTING}/nsfw-commission/nsfw-cover-s.jpg`
 const coverPath = './public/images/nsfw-cover.jpg'
 const coverStream = fs.createWriteStream(coverPath)
 
-axios({
-  method: 'get',
-  url: coverUrl,
-  responseType: 'stream'
-})
-  .then(res => {
-    res.data.pipe(coverStream)
+https
+  .get(coverUrl, response => {
+    response.pipe(coverStream)
     coverStream.on('finish', () => {
       coverStream.close()
       checkDownloadsCompleted()
     })
   })
-  .catch(err => {
-    console.error(`Error: ${err.message}`)
-    exit(1)
+  .on('error', err => {
+    console.error('\x1b[41m%s\x1b[0m', ' FAIL ', `Error: ${err.message}`)
+    process.exit(1)
   })
-
-// Set the commission directory path and get all the files and sub-directory paths recursively
-const commissionDirPath = './data/commission'
-const commissionFiles = getAllFiles(commissionDirPath)
 
 // Keep track of completed downloads
 let completedDownloads = 0
 
-// Loop through each file and check if it is a .ts file
-commissionFiles.forEach(filePath => {
-  if (path.extname(filePath) !== '.ts') {
-    return
-  }
+// Download each image in the commissionData array
+for (const commission of commissionData) {
+  const { fileName, Character } = commission
 
-  // Read file data, split it into separate lines and set variables for file name and character
-  fs.readFile(filePath, 'utf8', (err, data) => {
-    if (err) {
-      console.error(err)
-      return
-    }
+  // Create the directory for the character if it doesn't exist
+  const dirPath = path.join(publicDirPath, Character)
+  fs.mkdirSync(dirPath, { recursive: true })
 
-    const lines = data.split('\n')
-    let fileName = ''
-    let character = ''
+  // Download the image using https and stream it to a writer object
+  const filePath = path.join(dirPath, `${fileName}.jpg`)
+  const imageUrl = `https://${HOSTING}/nsfw-commission/${Character}/${fileName}.jpg`
 
-    // Loop through each line of the file and set variables accordingly
-    lines.forEach(line => {
-      if (line.includes('fileName:')) {
-        fileName = line.split("'")[1]
-      }
-      if (line.includes('Character:')) {
-        character = line.split("'")[1]
-      }
-
-      // If both variables are set, create a download link for the image and save it to the public folder
-      if (fileName && character) {
-        const downloadLink = `https://${HOSTING}/nsfw-commission/${character}/${fileName}.jpg`
-
-        // Create path to directory and check if it exists, create it otherwise
-        const dirPath = path.join('./public/images', character)
-        if (!fs.existsSync(dirPath)) {
-          fs.mkdirSync(dirPath, { recursive: true })
-        }
-
-        // Set file path and download the image using axios and stream it to a writer object
-        const filePath = path.join(dirPath, `${fileName}.jpg`)
-        const writer = fs.createWriteStream(filePath)
-
-        axios({
-          method: 'get',
-          url: downloadLink,
-          responseType: 'stream'
-        })
-          .then(res => {
-            res.data.pipe(writer)
-            writer.on('finish', () => {
-              writer.close()
-              completedDownloads++
-              if (completedDownloads === commissionFiles.length) {
-                checkDownloadsCompleted()
-              }
-            })
-          })
-          .catch(err => {
-            console.error('\x1b[41m%s\x1b[0m', ' FAIL ', `${downloadLink} ${err.message}`)
-            exit(1)
-          })
-
-        // Reset variables
-        fileName = ''
-        character = ''
-      }
+  downloadImage(imageUrl, filePath)
+    .then(() => {
+      completedDownloads++
+      checkDownloadsCompleted()
     })
-  })
-})
-
-// Recursive function to get all file names in the directory path provided
-function getAllFiles(dirPath: string, arrayOfFiles: string[] = []): string[] {
-  const files = fs.readdirSync(dirPath)
-
-  files.forEach(file => {
-    if (fs.statSync(path.join(dirPath, file)).isDirectory()) {
-      arrayOfFiles = getAllFiles(path.join(dirPath, file), arrayOfFiles)
-    } else {
-      arrayOfFiles.push(path.join(dirPath, '/', file))
-    }
-  })
-
-  return arrayOfFiles
+    .catch(error => {
+      console.error(
+        '\x1b[41m%s\x1b[0m',
+        ' FAIL ',
+        `Error downloading image "${fileName}.jpg": ${error.message}`
+      )
+      process.exit(1)
+    })
 }
 
-// Function to check if all downloads are completed
+// Helper function to download an image and save it to a file
+function downloadImage(url: string, filePath: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const imageStream = fs.createWriteStream(filePath)
+    https
+      .get(url, response => {
+        response.pipe(imageStream)
+        imageStream.on('finish', () => {
+          imageStream.close()
+          resolve()
+        })
+      })
+      .on('error', err => {
+        imageStream.close()
+        fs.unlinkSync(filePath)
+        reject(err)
+      })
+  })
+}
+
+// Helper function to check if all downloads are completed
 function checkDownloadsCompleted() {
-  if (completedDownloads === commissionFiles.length) {
+  if (completedDownloads === commissionData.length) {
     console.log('\x1b[42m%s\x1b[0m', ' DONE ', 'All downloads completed.')
+    process.exit(0)
   }
 }

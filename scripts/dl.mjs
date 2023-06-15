@@ -1,8 +1,10 @@
-// Import required modules
-import axios from 'axios'
 import dotenv from 'dotenv'
 import fs from 'fs'
+import http from 'http'
+import https from 'https'
 import path from 'path'
+
+// Import required modules
 
 // Set HOSTING environment variable to either dotenv or process.env methods
 const HOSTING =
@@ -29,22 +31,24 @@ const coverUrl = `https://${HOSTING}/nsfw-commission/nsfw-cover-s.jpg`
 const coverPath = './public/images/nsfw-cover.jpg'
 const coverStream = fs.createWriteStream(coverPath)
 
-axios({
-  method: 'get',
-  url: coverUrl,
-  responseType: 'stream'
-})
-  .then(res => {
-    res.data.pipe(coverStream)
+const downloadCoverImage = (url, _path) => {
+  const protocol = url.startsWith('https') ? https : http
+
+  const request = protocol.get(url, response => {
+    response.pipe(coverStream)
     coverStream.on('finish', () => {
       coverStream.close()
       checkDownloadsCompleted()
     })
   })
-  .catch(err => {
+
+  request.on('error', err => {
     console.error(`Error: ${err.message}`)
     process.exit(1)
   })
+}
+
+downloadCoverImage(coverUrl, coverPath)
 
 // Set the commission directory path and get all the files and sub-directory paths recursively
 const commissionDirPath = './data/commission'
@@ -89,29 +93,27 @@ commissionFiles.forEach(filePath => {
           fs.mkdirSync(dirPath, { recursive: true })
         }
 
-        // Set file path and download the image using axios and stream it to a writer object
+        // Set file path and download the image using http/https and stream it to a writer object
         const filePath = path.join(dirPath, `${fileName}.jpg`)
         const writer = fs.createWriteStream(filePath)
 
-        axios({
-          method: 'get',
-          url: downloadLink,
-          responseType: 'stream'
+        const protocol = downloadLink.startsWith('https') ? https : http
+
+        const request = protocol.get(downloadLink, response => {
+          response.pipe(writer)
+          writer.on('finish', () => {
+            writer.close()
+            completedDownloads++
+            if (completedDownloads === commissionFiles.length) {
+              checkDownloadsCompleted()
+            }
+          })
         })
-          .then(res => {
-            res.data.pipe(writer)
-            writer.on('finish', () => {
-              writer.close()
-              completedDownloads++
-              if (completedDownloads === commissionFiles.length) {
-                checkDownloadsCompleted()
-              }
-            })
-          })
-          .catch(err => {
-            console.error('\x1b[41m%s\x1b[0m', ' FAIL ', `${downloadLink} ${err.message}`)
-            process.exit(1)
-          })
+
+        request.on('error', err => {
+          console.error('\x1b[41m%s\x1b[0m', ' FAIL ', `${downloadLink} ${err.message}`)
+          process.exit(1)
+        })
 
         // Reset variables
         fileName = ''
