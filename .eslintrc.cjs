@@ -1,15 +1,16 @@
 /** @type {import('eslint').Linter.Config} */
 module.exports = {
+  root: true,
   env: {
     es2021: true,
     browser: true,
     node: true
   },
   reportUnusedDisableDirectives: true,
-  ignorePatterns: ['next-env.d.ts'],
   parser: '@typescript-eslint/parser',
   extends: [
     'next/core-web-vitals',
+    'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:tailwindcss/recommended',
     'prettier'
@@ -32,6 +33,7 @@ module.exports = {
       jsx: true
     }
   },
+  plugins: ['@typescript-eslint'],
   rules: {
     '@next/next/no-img-element': 'off',
     'prefer-const': 'error',

@@ -7,6 +7,7 @@ const twitterCard = `https://img.aozaki.cc/nsfw-cover.jpg`
 const YEAR = new Date().getFullYear()
 
 // Nextra blog theme config
+// eslint-disable-next-line import/no-anonymous-default-export
 export default {
   head: ({ meta }: { meta: { title: string; description: string; image: string } }) => {
     // Get Current Title
