@@ -1,7 +1,7 @@
 /** @type {import('eslint').Linter.Config} */
 module.exports = {
   env: {
-    es6: true,
+    es2021: true,
     browser: true,
     node: true
   },
@@ -9,16 +9,20 @@ module.exports = {
   ignorePatterns: ['next-env.d.ts'],
   parser: '@typescript-eslint/parser',
   extends: [
-    'plugin:@next/next/recommended',
+    'next/core-web-vitals',
     'plugin:@typescript-eslint/recommended',
-    'plugin:react/recommended',
     'plugin:tailwindcss/recommended',
-    'plugin:prettier/recommended'
+    'prettier'
   ],
   settings: {
     react: {
       pragma: 'React',
       version: 'detect'
+    },
+    'import/resolver': {
+      node: {
+        extensions: ['.ts', '.tsx']
+      }
     }
   },
   parserOptions: {
@@ -28,14 +32,9 @@ module.exports = {
       jsx: true
     }
   },
-  plugins: ['@typescript-eslint'],
   rules: {
     '@next/next/no-img-element': 'off',
     'prefer-const': 'error',
-    // suppress errors for missing 'import React' in files
-    'react/react-in-jsx-scope': 'off',
-    // allow jsx syntax in js files (for next.js project)
-    'react/jsx-filename-extension': ['error', { extensions: ['.tsx', '.jsx'], allow: 'as-needed' }], //should add ".ts" if typescript project
 
     // Tailwind CSS
     'tailwindcss/classnames-order': 'off', // conflicts with prettier-plugin-tailwindcss
