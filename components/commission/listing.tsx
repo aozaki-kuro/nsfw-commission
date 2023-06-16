@@ -13,7 +13,7 @@ interface Props {
 const renderCommission = (commission: CommissionInfoProps) => (
   <div key={`${commission.Creator}-${commission.PublishDate}`}>
     <Image
-      src={require(`public/images/${commission.Character}/${commission.fileName}.jpg`)}
+      src={require(`data/commission/images/${commission.Character}/${commission.fileName}.jpg`)}
       alt={`${commission.Creator} ©️ ${commission.PublishDate}`}
       quality={95}
       placeholder="blur"

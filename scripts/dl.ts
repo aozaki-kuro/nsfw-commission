@@ -19,12 +19,13 @@ if (!HOSTING) {
 }
 
 // Create the directory for storing downloaded images if it doesn't exist
-const publicDirPath = './public/images'
+const publicDirPath = './data/commission/images'
+
 fs.mkdirSync(publicDirPath, { recursive: true })
 
 // Download cover image and handle completion
 const coverUrl = `https://${HOSTING}/nsfw-commission/nsfw-cover-s.jpg`
-const coverPath = './public/images/nsfw-cover.jpg'
+const coverPath = publicDirPath + '/nsfw-cover.jpg'
 const coverStream = fs.createWriteStream(coverPath)
 
 https

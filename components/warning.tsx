@@ -75,7 +75,7 @@ export default function MyModal() {
               >
                 <Dialog.Panel className="w-full max-w-md overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all dark:bg-back-dark">
                   <Image
-                    src={require('public/images/nsfw-cover.jpg')}
+                    src={require('data/commission/images/nsfw-cover.jpg')}
                     alt="NSFW Commissions"
                     quality={95}
                     placeholder="blur"

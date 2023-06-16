@@ -35,7 +35,7 @@ yarn-error.log*
 next-env.d.ts
 
 # public images
-public/images/
+data/commission/images/
 scripts/dl.js
 
 # sitemap & rss

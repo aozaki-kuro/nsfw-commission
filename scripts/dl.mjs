@@ -20,18 +20,19 @@ const HOSTING =
     process.exit(1)
   })()
 
-// Create a directory path to public/images and check if it exists, create it otherwise
-const publicDirPath = './public/images'
+// Create a directory path to data/commission/images and check if it exists, create it otherwise
+const publicDirPath = './data/commission/images'
+
 if (!fs.existsSync(publicDirPath)) {
   fs.mkdirSync(publicDirPath)
 }
 
 // Download cover image to the given path and log success to the console
 const coverUrl = `https://${HOSTING}/nsfw-commission/nsfw-cover-s.jpg`
-const coverPath = './public/images/nsfw-cover.jpg'
+const coverPath = publicDirPath + '/nsfw-cover.jpg'
 const coverStream = fs.createWriteStream(coverPath)
 
-const downloadCoverImage = (url, _path) => {
+const downloadCoverImage = url => {
   const protocol = url.startsWith('https') ? https : http
 
   const request = protocol.get(url, response => {
@@ -88,7 +89,7 @@ commissionFiles.forEach(filePath => {
         const downloadLink = `https://${HOSTING}/nsfw-commission/${character}/${fileName}.jpg`
 
         // Create path to directory and check if it exists, create it otherwise
-        const dirPath = path.join('./public/images', character)
+        const dirPath = path.join(publicDirPath, character)
         if (!fs.existsSync(dirPath)) {
           fs.mkdirSync(dirPath, { recursive: true })
         }
