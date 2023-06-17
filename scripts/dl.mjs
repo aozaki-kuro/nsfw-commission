@@ -28,7 +28,7 @@ if (!fs.existsSync(publicDirPath)) {
 }
 
 // Download cover image to the given path and log success to the console
-const coverUrl = `https://${HOSTING}/nsfw-commission/nsfw-cover-s.jpg`
+const coverUrl = `https://${HOSTING}/nsfw-commission/nsfw-cover.jpg`
 const coverPath = publicDirPath + '/nsfw-cover.jpg'
 const coverStream = fs.createWriteStream(coverPath)
 

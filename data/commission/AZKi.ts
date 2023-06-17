@@ -33,7 +33,7 @@ export const AZKi: Props[] = [
     Skeb: 'https://skeb.jp/@hcz_n/works/51'
   },
   {
-    fileName: '20230626_アータ',
+    fileName: '20230616_アータ',
     Character: 'azki',
     Twitter: 'https://twitter.com/C4Rm93/status/1669365839303434240',
     Pixiv: '',

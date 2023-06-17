@@ -1,13 +1,9 @@
 {
   "editor.formatOnSave": true,
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.codeActionsOnSave": {
     "source.organizeImports": true,
     "source.addMissingImports": true,
     "source.fixAll.eslint": true
   },
-  "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact", "json"],
-  "[ignore]": {
-    "editor.defaultFormatter": "foxundermoon.shell-format"
-  }
+  "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact", "json"]
 }

@@ -15,7 +15,7 @@
   "dependencies": {
     "@headlessui/react": "^1.7.15",
     "autoprefixer": "^10.4.14",
-    "dotenv": "^16.2.0",
+    "dotenv": "^16.3.0",
     "next": "13.4.6",
     "nextra": "2.7.1",
     "nextra-theme-blog": "2.7.1",
@@ -32,7 +32,7 @@
     "@types/react-dom": "^18.2.5",
     "@typescript-eslint/eslint-plugin": "^5.59.11",
     "@typescript-eslint/parser": "^5.59.11",
-    "eslint": "8.42.0",
+    "eslint": "8.43.0",
     "eslint-config-next": "13.4.6",
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-tailwindcss": "^3.12.1",

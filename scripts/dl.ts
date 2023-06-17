@@ -24,7 +24,7 @@ const publicDirPath = './data/commission/images'
 fs.mkdirSync(publicDirPath, { recursive: true })
 
 // Download cover image and handle completion
-const coverUrl = `https://${HOSTING}/nsfw-commission/nsfw-cover-s.jpg`
+const coverUrl = `https://${HOSTING}/nsfw-commission/nsfw-cover.jpg`
 const coverPath = publicDirPath + '/nsfw-cover.jpg'
 const coverStream = fs.createWriteStream(coverPath)
 
