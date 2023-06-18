@@ -49,7 +49,22 @@ const downloadCoverImage = url => {
   })
 }
 
-downloadCoverImage(coverUrl, coverPath)
+downloadCoverImage(coverUrl)
+
+// Recursive function to get all file names in the directory path provided
+function getAllFiles(dirPath, arrayOfFiles = []) {
+  const files = fs.readdirSync(dirPath)
+
+  files.forEach(file => {
+    if (fs.statSync(path.join(dirPath, file)).isDirectory()) {
+      arrayOfFiles = getAllFiles(path.join(dirPath, file), arrayOfFiles)
+    } else {
+      arrayOfFiles.push(path.join(dirPath, '/', file))
+    }
+  })
+
+  return arrayOfFiles
+}
 
 // Set the commission directory path and get all the files and sub-directory paths recursively
 const commissionDirPath = './data/commission'
@@ -123,21 +138,6 @@ commissionFiles.forEach(filePath => {
     })
   })
 })
-
-// Recursive function to get all file names in the directory path provided
-function getAllFiles(dirPath, arrayOfFiles = []) {
-  const files = fs.readdirSync(dirPath)
-
-  files.forEach(file => {
-    if (fs.statSync(path.join(dirPath, file)).isDirectory()) {
-      arrayOfFiles = getAllFiles(path.join(dirPath, file), arrayOfFiles)
-    } else {
-      arrayOfFiles.push(path.join(dirPath, '/', file))
-    }
-  })
-
-  return arrayOfFiles
-}
 
 // Function to check if all downloads are completed
 function checkDownloadsCompleted() {
