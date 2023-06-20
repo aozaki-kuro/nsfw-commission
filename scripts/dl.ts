@@ -1,3 +1,11 @@
+/*
+ * Notice: TypeScript version did this in a different approach:
+ *
+ * The array was written in TypeScript and imported here to be processed.
+ * The script cannot be compiled into CommonJS because of this.
+ *
+ */
+
 import { commissionData } from '#data/CommissionData'
 import dotenv from 'dotenv'
 import fs from 'fs'
