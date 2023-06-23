@@ -9,6 +9,7 @@ const withNextra = nextra({
 
 export default withNextra({
   reactStrictMode: true,
+  cleanDistDir: true,
   images: {
     unoptimized: true
   },
