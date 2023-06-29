@@ -24,5 +24,12 @@ export const Ina: Props[] = [
     Twitter: 'https://twitter.com/YuukaUta/status/1558234376734879745',
     Pixiv: 'https://www.pixiv.net/artworks/100448594',
     Skeb: 'https://skeb.jp/@YuukaUta/works/43'
+  },
+  {
+    fileName: '20230629_七市',
+    Character: 'ina',
+    Twitter: '',
+    Pixiv: '',
+    Skeb: 'https://skeb.jp/@nanashi_nogi/works/260'
   }
 ]
