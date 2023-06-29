@@ -13,14 +13,14 @@
 
 import { commissionData } from '#data/CommissionData'
 import dotenv from 'dotenv'
-import fs from 'fs'
+import fs, { promises as fsPromises } from 'fs'
 import https from 'https'
 import path from 'path'
 
-const msgError = '\x1b[0m[' + '\x1b[31m' + ' ERROR ' + '\x1b[0m' + ']'
-// const msgInfo = '\x1b[0m[' + '\x1b[33m' + ' INFO ' + '\x1b[0m' + ']'
-const msgDone = '\x1b[0m[' + '\x1b[32m' + ' DONE ' + '\x1b[0m' + ']'
-// const msgWarn = '\x1b[0m[' + '\x1b[33m' + ' WARN ' + '\x1b[0m' + ']'
+const msgError = '\x1b[0m[\x1b[31m ERROR \x1b[0m]'
+const msgDone = '\x1b[0m[\x1b[32m DONE \x1b[0m]'
+
+const publicDirPath = './data/commission/images'
 
 dotenv.config()
 
@@ -30,59 +30,47 @@ if (!HOSTING) {
   process.exit(1)
 }
 
-const publicDirPath = './data/commission/images'
-
-fs.mkdirSync(publicDirPath, { recursive: true })
-
-const coverUrl = `https://${HOSTING}/nsfw-commission/nsfw-cover.jpg`
-
-const coverPath = path.join(publicDirPath, 'nsfw-cover.jpg')
-
-https
-  .get(coverUrl, response => {
-    const coverStream = fs.createWriteStream(coverPath)
-    response.pipe(coverStream)
-    coverStream.on('finish', coverStream.close)
-  })
-  .on('error', err => {
-    console.error(msgError, `${err.message}`)
-    process.exit(1)
-  })
-
-async function downloadImage(url: string, filePath: string): Promise<void> {
+async function downloadResource(url: string, filePath: string): Promise<void> {
   return new Promise((resolve, reject) => {
-    const imageStream = fs.createWriteStream(filePath)
+    const fileStream = fs.createWriteStream(filePath)
     https
       .get(url, response => {
-        response.pipe(imageStream)
-        imageStream.on('finish', () => {
-          imageStream.close()
+        response.pipe(fileStream)
+        fileStream.on('finish', () => {
+          fileStream.close()
           resolve()
         })
       })
       .on('error', err => {
-        imageStream.close()
-        fs.unlinkSync(filePath)
-        reject(err)
+        fileStream.close()
+        fsPromises.unlink(filePath).finally(() => {
+          reject(err)
+        })
       })
   })
 }
 
 async function downloadImages() {
   try {
-    await Promise.all(
-      commissionData.map(async commission => {
-        const { fileName, Character } = commission
-        const dirPath = path.join(publicDirPath, Character)
+    await fsPromises.mkdir(publicDirPath, { recursive: true })
 
-        fs.mkdirSync(dirPath, { recursive: true })
+    const coverUrl = `https://${HOSTING}/nsfw-commission/nsfw-cover.jpg`
+    const coverPath = path.join(publicDirPath, 'nsfw-cover.jpg')
+    await downloadResource(coverUrl, coverPath)
 
-        const filePath = path.join(dirPath, `${fileName}.jpg`)
-        const imageUrl = `https://${HOSTING}/nsfw-commission/${Character}/${fileName}.jpg`
+    const downloadPromises = commissionData.map(async commission => {
+      const { fileName, Character } = commission
+      const dirPath = path.join(publicDirPath, Character)
 
-        await downloadImage(imageUrl, filePath)
-      })
-    )
+      await fsPromises.mkdir(dirPath, { recursive: true })
+
+      const filePath = path.join(dirPath, `${fileName}.jpg`)
+      const imageUrl = `https://${HOSTING}/nsfw-commission/${Character}/${fileName}.jpg`
+
+      await downloadResource(imageUrl, filePath)
+    })
+
+    await Promise.all(downloadPromises)
 
     console.log(msgDone, 'All downloads completed.')
     process.exit(0)
