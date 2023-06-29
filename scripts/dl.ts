@@ -3,6 +3,11 @@
  *
  * The array was written in TypeScript and imported here to be processed.
  * The script cannot be compiled into CommonJS because of this.
+ * I don't know which is more sensible after all so I kept both versions.
+ *
+ * The efficiency of the script is pretty identical on MacBook M1 Pro,
+ * but it is slower than module js version when building on Vercel.
+ * The difference is like *several seconds* so...... needs further investigations.
  *
  */
 
@@ -12,15 +17,16 @@ import fs from 'fs'
 import https from 'https'
 import path from 'path'
 
+const msgError = '\x1b[0m[' + '\x1b[31m' + ' ERROR ' + '\x1b[0m' + ']'
+// const msgInfo = '\x1b[0m[' + '\x1b[33m' + ' INFO ' + '\x1b[0m' + ']'
+const msgDone = '\x1b[0m[' + '\x1b[32m' + ' DONE ' + '\x1b[0m' + ']'
+// const msgWarn = '\x1b[0m[' + '\x1b[33m' + ' WARN ' + '\x1b[0m' + ']'
+
 dotenv.config()
 
 const HOSTING = process.env.HOSTING
 if (!HOSTING) {
-  console.error(
-    '\x1b[41m%s\x1b[0m',
-    ' FAIL ',
-    'DL links not set correctly in the environment or .env'
-  )
+  console.error(msgError, 'DL links not set correctly in the environment or .env')
   process.exit(1)
 }
 
@@ -39,7 +45,7 @@ https
     coverStream.on('finish', coverStream.close)
   })
   .on('error', err => {
-    console.error('\x1b[41m%s\x1b[0m', ' FAIL ', `Error: ${err.message}`)
+    console.error(msgError, `${err.message}`)
     process.exit(1)
   })
 
@@ -78,10 +84,10 @@ async function downloadImages() {
       })
     )
 
-    console.log('\x1b[42m%s\x1b[0m', ' DONE ', 'All downloads completed.')
+    console.log(msgDone, 'All downloads completed.')
     process.exit(0)
   } catch (error: any) {
-    console.error('\x1b[41m%s\x1b[0m', ' FAIL ', `Error downloading images: ${error.message}`)
+    console.error(msgError, `Error downloading images: ${error.message}`)
     process.exit(1)
   }
 }

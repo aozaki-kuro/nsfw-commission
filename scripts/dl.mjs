@@ -1,10 +1,22 @@
+/*
+ * Notice: This is the module JS version
+ *
+ * The project was written in TypeScript, so the array of the commission data was also TS.
+ * TS cannot be imported here and compiling it is not an option too.
+ * So the script extracts the info pretty "brutally" by splitting the lines and words.
+ *
+ */
+
 import dotenv from 'dotenv'
 import fs from 'fs'
 import http from 'http'
 import https from 'https'
 import path from 'path'
 
-// Import required modules
+const msgError = '\x1b[0m[' + '\x1b[31m' + ' ERROR ' + '\x1b[0m' + ']'
+// const msgInfo = '\x1b[0m[' + '\x1b[33m' + ' INFO ' + '\x1b[0m' + ']'
+const msgDone = '\x1b[0m[' + '\x1b[32m' + ' DONE ' + '\x1b[0m' + ']'
+// const msgWarn = '\x1b[0m[' + '\x1b[33m' + ' WARN ' + '\x1b[0m' + ']'
 
 // Set HOSTING environment variable to either dotenv or process.env methods
 const HOSTING =
@@ -12,11 +24,7 @@ const HOSTING =
   process.env.HOSTING ||
   (() => {
     // If host is undefined, log error message and exit program
-    console.error(
-      '\x1b[41m%s\x1b[0m',
-      ' FAIL ',
-      'DL links not set correctly in the environment or .env'
-    )
+    console.error(msgError, 'DL links not set correctly in the environment or .env')
     process.exit(1)
   })()
 
@@ -127,7 +135,7 @@ commissionFiles.forEach(filePath => {
         })
 
         request.on('error', err => {
-          console.error('\x1b[41m%s\x1b[0m', ' FAIL ', `${downloadLink} ${err.message}`)
+          console.error(msgError, `${downloadLink} ${err.message}`)
           process.exit(1)
         })
 
@@ -142,6 +150,6 @@ commissionFiles.forEach(filePath => {
 // Function to check if all downloads are completed
 function checkDownloadsCompleted() {
   if (completedDownloads === commissionFiles.length) {
-    console.log('\x1b[42m%s\x1b[0m', ' DONE ', 'All downloads completed.')
+    console.log(msgDone, 'All downloads completed.')
   }
 }
