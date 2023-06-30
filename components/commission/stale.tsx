@@ -1,34 +1,35 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Commission from './listing'
 
 const Stale = ({ Character }: { Character: string }) => {
   const [isLoaded, setIsLoaded] = useState(false)
-
-  const contentID = 'stale-commission-' + `${Character}`
+  const ref = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
-    const handleScroll = () => {
-      const element = document.getElementById(contentID)
-      if (element) {
-        const { top } = element.getBoundingClientRect()
-        const windowHeight = window.innerHeight || document.documentElement.clientHeight
-        if (top <= windowHeight) {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
           setIsLoaded(true)
-          window.removeEventListener('scroll', handleScroll)
+          observer.disconnect()
         }
+      },
+      {
+        rootMargin: '0px',
+        threshold: 0.1
       }
-    }
+    )
 
-    window.addEventListener('scroll', handleScroll)
-    handleScroll()
+    if (ref.current) {
+      observer.observe(ref.current)
+    }
 
     return () => {
-      window.removeEventListener('scroll', handleScroll)
+      observer.disconnect()
     }
-  }, [contentID]) // Add contentID to the dependency array
+  }, [])
 
   return (
-    <div id={contentID}>
+    <div ref={ref}>
       {isLoaded ? (
         <div>
           <Commission Character={Character} />
