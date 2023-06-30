@@ -29,7 +29,7 @@ export const Ina: Props[] = [
     fileName: '20230629_七市',
     Character: 'ina',
     Twitter: '',
-    Pixiv: '',
+    Pixiv: 'https://www.pixiv.net/artworks/109487406',
     Skeb: 'https://skeb.jp/@nanashi_nogi/works/260'
   }
 ]
