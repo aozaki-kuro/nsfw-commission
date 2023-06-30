@@ -4,10 +4,12 @@
  * The array was written in TypeScript and imported here to be processed.
  * The script cannot be compiled into CommonJS because of this.
  * I don't know which is more sensible after all so I kept both versions.
- *
- * The efficiency of the script is pretty identical on MacBook M1 Pro,
- * but it is slower than module js version when building on Vercel.
- * The difference is like *several seconds* so...... needs further investigations.
+ */
+
+/*
+ * Update:
+ * After optimization the performance impact is minor now.
+ * So the script was switched to TypeScript version.
  *
  */
 
@@ -17,8 +19,11 @@ import fs, { promises as fsPromises } from 'fs'
 import https from 'https'
 import path from 'path'
 
+// Message definition
 const msgError = '\x1b[0m[\x1b[31m ERROR \x1b[0m]'
 const msgDone = '\x1b[0m[\x1b[32m DONE \x1b[0m]'
+// const msgInfo = '\x1b[0m[\x1b[33m INFO \x1b[0m]'
+// const msgWarn = '\x1b[0m[\x1b[33m WARN \x1b[0m]'
 
 const publicDirPath = './data/commission/images'
 

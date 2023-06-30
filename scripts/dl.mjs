@@ -4,6 +4,11 @@
  * The project was written in TypeScript, so the array of the commission data was also TS.
  * TS cannot be imported here and compiling it is not an option too.
  * So the script extracts the info pretty "brutally" by splitting the lines and words.
+ */
+
+/*
+ * Status: Stale from 2023-06-29
+ * Reason: Significant performance improvement for the TypeScript version
  *
  */
 
