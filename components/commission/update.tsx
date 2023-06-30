@@ -1,7 +1,6 @@
 import { charaDictionary } from '#data/CharaDictionary'
 import { commissionData } from '#data/CommissionData'
 import Link from 'next/link'
-import { useMemo } from 'react'
 
 type LatestEntry = {
   fileName: string
@@ -14,27 +13,20 @@ const kebabCase = (str: string) =>
     .replace(/'/g, '')
     .replace(/[\W_]+/g, '-')
 
-// Calculate the latest entry outside of the component, since commissionData is static
-const latestEntry: LatestEntry | null = Object.values(commissionData).reduce(
-  (latest: LatestEntry | null, { fileName, Character }) => {
-    const publishDateInt = parseInt(fileName.substring(0, 8))
-
-    if (isNaN(publishDateInt)) return latest
-
-    if (!latest || latest.fileName < fileName) {
-      return { fileName, Character }
-    }
-
-    return latest
-  },
-  null
-)
-
 const Update = () => {
-  const character = latestEntry ? latestEntry.Character : ''
-  const dictionaryEntry = useMemo(
-    () => charaDictionary.find(chara => chara.Abbr === character),
-    [character]
+  const latestEntry = Object.values(commissionData).reduce(
+    (latest: LatestEntry | null, { fileName, Character }) => {
+      const publishDateInt = parseInt(fileName.substring(0, 8))
+
+      if (isNaN(publishDateInt)) return latest
+
+      if (!latest || latest.fileName < fileName) {
+        return { fileName, Character }
+      }
+
+      return latest
+    },
+    null
   )
 
   if (!latestEntry) {
@@ -45,8 +37,9 @@ const Update = () => {
     4,
     6
   )}/${latestEntry.fileName.substring(6, 8)}`
-
-  const fullName = dictionaryEntry?.FullName ?? latestEntry.Character.toLowerCase()
+  const { Character } = latestEntry
+  const dictionaryEntry = charaDictionary.filter(chara => chara.Abbr === Character)[0]
+  const fullName = dictionaryEntry?.FullName ?? Character.toLowerCase()
 
   return (
     <div className="flex flex-auto font-mono text-sm ss:text-xs">
