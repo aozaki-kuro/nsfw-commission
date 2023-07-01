@@ -28,7 +28,7 @@ export const Ina: Props[] = [
   {
     fileName: '20230629_七市',
     Character: 'ina',
-    Twitter: '',
+    Twitter: 'https://twitter.com/CrystallizeSub/status/1675066725484863488',
     Pixiv: 'https://www.pixiv.net/artworks/109487406',
     Skeb: 'https://skeb.jp/@nanashi_nogi/works/260'
   }
