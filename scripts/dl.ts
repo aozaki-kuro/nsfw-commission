@@ -56,6 +56,7 @@ async function downloadResource(url: string, filePath: string): Promise<void> {
 }
 
 async function downloadImages() {
+  const startTime = process.hrtime.bigint()
   try {
     await fsPromises.mkdir(publicDirPath, { recursive: true })
 
@@ -77,7 +78,9 @@ async function downloadImages() {
 
     await Promise.all(downloadPromises)
 
-    console.log(msgDone, 'All downloads completed.')
+    const endTime = process.hrtime.bigint()
+    const elapsedTime = (endTime - startTime) / BigInt(1000000)
+    console.log(msgDone, `All downloads completed in ${elapsedTime}ms.`)
     process.exit(0)
   } catch (error: any) {
     console.error(msgError, `Error downloading images: ${error.message}`)
