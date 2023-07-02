@@ -31,5 +31,12 @@ export const AZKi: Props[] = [
     Twitter: '',
     Pixiv: '',
     Skeb: 'https://skeb.jp/@hcz_n/works/51'
+  },
+  {
+    fileName: '20230702_アータ',
+    Character: 'azki',
+    Twitter: 'https://twitter.com/C4Rm93/status/1669365839303434240',
+    Pixiv: 'https://www.pixiv.net/artworks/109525980',
+    Skeb: ''
   }
 ]
