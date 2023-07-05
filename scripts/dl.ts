@@ -64,6 +64,11 @@ async function downloadImages() {
     const coverPath = path.join(publicDirPath, 'nsfw-cover.jpg')
     await downloadResource(coverUrl, coverPath)
 
+    // Small size cover image
+    const smallCoverUrl = `https://${HOSTING}/nsfw-commission/nsfw-cover-s.jpg`
+    const smallCoverPath = path.join(publicDirPath, 'nsfw-cover-s.jpg')
+    await downloadResource(smallCoverUrl, smallCoverPath)
+
     const downloadPromises = commissionData.map(async commission => {
       const { fileName, Character } = commission
       const dirPath = path.join(publicDirPath, Character)
