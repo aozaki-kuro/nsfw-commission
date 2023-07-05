@@ -60,9 +60,9 @@ async function downloadImages() {
   try {
     await fsPromises.mkdir(publicDirPath, { recursive: true })
 
-    const coverUrl = `https://${HOSTING}/nsfw-commission/nsfw-cover.jpg`
-    const coverPath = path.join(publicDirPath, 'nsfw-cover.jpg')
-    await downloadResource(coverUrl, coverPath)
+    // const coverUrl = `https://${HOSTING}/nsfw-commission/nsfw-cover.jpg`
+    // const coverPath = path.join(publicDirPath, 'nsfw-cover.jpg')
+    // await downloadResource(coverUrl, coverPath)
 
     // Small size cover image
     const smallCoverUrl = `https://${HOSTING}/nsfw-commission/nsfw-cover-s.jpg`
