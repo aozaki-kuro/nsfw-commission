@@ -1,55 +1,40 @@
-// Import required modules and components from libraries
 import { Dialog, Transition } from '@headlessui/react'
 import Image from 'next/image'
 import { Fragment, useEffect, useState } from 'react'
 
-// Function to redirect user to Google on Leave Now button click
-function leave() {
-  window.location.href = 'https://www.google.com'
-}
+const confirmedAgeStorageKey = 'hasConfirmedAge'
 
-// Component for modal that confirms age before showing NSFW content
 export default function MyModal() {
-  // Set state for whether the modal is open or not
   const [isOpen, setIsOpen] = useState(true)
-  // Create storage key for localStorage
-  const confirmedAgeStorageKey = 'hasConfirmedAge'
 
-  // Check if user has already confirmed their age in the past 12 hours
   useEffect(() => {
-    // Create an asynchronous function to check localStorage for confirmation of age
-    async function checkConfirmedAge() {
-      // Get the timestamp of when user last confirmed age from localStorage
-      const hasConfirmedAge = await localStorage.getItem(confirmedAgeStorageKey)
-      // If user has confirmed age within past 12 hours, close modal
-      if (hasConfirmedAge) {
-        const timestamp = parseInt(hasConfirmedAge, 10)
-        const confirmTime = Date.now() - 12 * 60 * 60 * 1000 // Subtract 12 hours in milliseconds
-        if (timestamp > confirmTime) {
-          setIsOpen(false)
-        }
+    const hasConfirmedAge = localStorage.getItem(confirmedAgeStorageKey)
+    if (hasConfirmedAge) {
+      const timestamp = parseInt(hasConfirmedAge, 10)
+      const confirmTime = Date.now() - 12 * 60 * 60 * 1000
+      if (timestamp > confirmTime) {
+        setIsOpen(false)
       }
     }
-    // Call the checkConfirmedAge function only once on component mount
-    checkConfirmedAge()
   }, [])
 
-  // Function to handle age confirmation and store confirmation time in localStorage
-  async function handleConfirmAge() {
-    await localStorage.setItem(confirmedAgeStorageKey, Date.now().toString())
+  function handleConfirmAge() {
+    localStorage.setItem(confirmedAgeStorageKey, Date.now().toString())
     closeModal()
   }
 
-  // Function to close modal
+  function leave() {
+    window.location.href = 'https://www.google.com'
+  }
+
   function closeModal() {
     setIsOpen(false)
   }
 
-  // Return JSX for modal component using Headless UI and Next.js Image component
   return (
     <>
       <Transition appear show={isOpen} as={Fragment}>
-        <Dialog as="div" className="relative z-10" onClose={() => setIsOpen(true)}>
+        <Dialog as="div" static className="relative z-10" onClose={() => setIsOpen(true)}>
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
