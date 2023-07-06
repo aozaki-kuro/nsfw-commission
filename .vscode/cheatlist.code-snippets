@@ -20,7 +20,7 @@
     "body": [
       "{",
       "  fileName: '$1',",
-      "  Character: '$2',",
+      "  Character: currentChara,",
       "  Twitter: '$3',",
       "  Pixiv: '$4',",
       "  Skeb: '$5'",
