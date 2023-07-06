@@ -15,8 +15,8 @@ const Stale = ({ Character }: { Character: string }) => {
       },
       {
         rootMargin: '0px',
-        threshold: 0.1
-      }
+        threshold: 0.1,
+      },
     )
 
     if (ref.current) {

@@ -26,7 +26,7 @@ const Update = () => {
 
       return latest
     },
-    null
+    null,
   )
 
   if (!latestEntry) {
@@ -35,7 +35,7 @@ const Update = () => {
 
   const formattedDate = `${latestEntry.fileName.substring(0, 4)}/${latestEntry.fileName.substring(
     4,
-    6
+    6,
   )}/${latestEntry.fileName.substring(6, 8)}`
   const { Character } = latestEntry
   const dictionaryEntry = charaDictionary.filter(chara => chara.Abbr === Character)[0]

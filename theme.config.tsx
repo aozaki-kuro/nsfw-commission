@@ -21,5 +21,5 @@ export default {
         <div className="float-right">Afezeria</div>
       </small>
     </div>
-  )
+  ),
 }

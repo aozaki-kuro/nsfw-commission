@@ -9,6 +9,6 @@ export const Misc: Props[] = [
     Character: 'misc',
     Twitter: 'https://twitter.com/NakamuraRohane/status/1668625063602708483',
     Pixiv: 'https://www.pixiv.net/artworks/108990302',
-    Skeb: ''
-  }
+    Skeb: '',
+  },
 ]

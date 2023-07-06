@@ -9,6 +9,6 @@ export const Lucia: Props[] = [
     Character: 'lucia',
     Twitter: 'https://twitter.com/UnoRyoku/status/1671030802241716231',
     Pixiv: 'https://www.pixiv.net/artworks/109181457',
-    Skeb: 'https://skeb.jp/@UnoRyoku/works/133'
-  }
+    Skeb: 'https://skeb.jp/@UnoRyoku/works/133',
+  },
 ]

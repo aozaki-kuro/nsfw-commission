@@ -23,5 +23,5 @@ export const commissionData: Props[] = [
 
   //Stale Data
   ...Nishe,
-  ...Tkmt
+  ...Tkmt,
 ]

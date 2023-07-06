@@ -87,8 +87,7 @@
 /*       Antialiased       */
 /*=========================*/
 
-@media screen and (min-device-pixel-ratio: 1.5),
-  screen and (min-resolution: 1.5dppx) {
+@media screen and (min-device-pixel-ratio: 1.5), screen and (min-resolution: 1.5dppx) {
   body {
     @apply antialiased;
   }
@@ -120,8 +119,8 @@
 }
 
 .date {
-  font-feature-settings: 'case' 1, 'cpsp' 1, 'dlig' 1, 'cv01' 1, 'cv02',
-    'cv03' 1, 'cv04' 1, 'tnum' 1, 'calt' 1;
+  font-feature-settings: 'case' 1, 'cpsp' 1, 'dlig' 1, 'cv01' 1, 'cv02', 'cv03' 1, 'cv04' 1,
+    'tnum' 1, 'calt' 1;
 }
 
 /* !! Ugly Hack to Get Rid of Patches !! */

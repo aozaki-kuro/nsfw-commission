@@ -8,7 +8,7 @@ export const charaDictionary: Chara[] = [
   { Abbr: 'lucia', FullName: 'Lucia' },
   {
     Abbr: 'ina',
-    FullName: "Ninomae Ina'Nis"
+    FullName: "Ninomae Ina'Nis",
   },
-  { Abbr: 'misc', FullName: 'Misc' }
+  { Abbr: 'misc', FullName: 'Misc' },
 ]
