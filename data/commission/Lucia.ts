@@ -16,8 +16,8 @@ export const Lucia: Props[] = [
   {
     fileName: '20230706_七市',
     Character: currentChara,
-    Twitter: '',
-    Pixiv: '',
+    Twitter: 'https://twitter.com/CrystallizeSub/status/1677338497462722562',
+    Pixiv: 'https://www.pixiv.net/artworks/109713460',
     Skeb: 'https://skeb.jp/@nanashi_nogi/works/263',
   },
 ]
