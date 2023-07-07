@@ -13,22 +13,22 @@ const kebabCase = (str: string) =>
     .replace(/'/g, '')
     .replace(/[\W_]+/g, '-')
 
+const latestEntry = Object.values(commissionData).reduce(
+  (latest: LatestEntry | null, { fileName, Character }) => {
+    const publishDateInt = parseInt(fileName.substring(0, 8))
+
+    if (isNaN(publishDateInt)) return latest
+
+    if (!latest || latest.fileName < fileName) {
+      return { fileName, Character }
+    }
+
+    return latest
+  },
+  null,
+)
+
 const Update = () => {
-  const latestEntry = Object.values(commissionData).reduce(
-    (latest: LatestEntry | null, { fileName, Character }) => {
-      const publishDateInt = parseInt(fileName.substring(0, 8))
-
-      if (isNaN(publishDateInt)) return latest
-
-      if (!latest || latest.fileName < fileName) {
-        return { fileName, Character }
-      }
-
-      return latest
-    },
-    null,
-  )
-
   if (!latestEntry) {
     return <p className="font-mono text-sm">No updates found</p>
   }
@@ -38,8 +38,8 @@ const Update = () => {
     6,
   )}/${latestEntry.fileName.substring(6, 8)}`
   const { Character } = latestEntry
-  const dictionaryEntry = charaDictionary.filter(chara => chara.Abbr === Character)[0]
-  const fullName = dictionaryEntry?.FullName ?? Character.toLowerCase()
+  const dictionaryEntry = charaDictionary.find(chara => chara.Abbr === Character)
+  const fullName = dictionaryEntry?.FullName || Character.toLowerCase()
 
   return (
     <div className="flex flex-auto font-mono text-sm ss:text-xs">

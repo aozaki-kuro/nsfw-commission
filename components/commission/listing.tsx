@@ -7,18 +7,6 @@ interface Props {
   Character: string
 }
 
-const renderCommission = (commission: CommissionInfoProps) => (
-  <div key={`${commission.Creator}-${commission.PublishDate}`}>
-    <Image
-      src={require(`data/commission/images/${commission.Character}/${commission.fileName}.jpg`)}
-      alt={`${commission.Creator} ©️ ${commission.PublishDate}`}
-      quality={95}
-      placeholder="blur"
-    />
-    <IllustratorInfo {...commission} />
-  </div>
-)
-
 const Listing = ({ Character }: Props) => {
   const lowercaseCharacter = Character.toLowerCase()
   const commissions = Object.values(commissionData)
@@ -34,7 +22,21 @@ const Listing = ({ Character }: Props) => {
     return <p>To be announced ...</p>
   }
 
-  return <>{commissions.map(renderCommission)}</>
+  return (
+    <>
+      {commissions.map((commission: CommissionInfoProps) => (
+        <div key={`${commission.Creator}-${commission.PublishDate}`}>
+          <Image
+            src={require(`data/commission/images/${commission.Character}/${commission.fileName}.jpg`)}
+            alt={`${commission.Creator} ©️ ${commission.PublishDate}`}
+            quality={95}
+            placeholder="blur"
+          />
+          <IllustratorInfo {...commission} />
+        </div>
+      ))}
+    </>
+  )
 }
 
 export default Listing
