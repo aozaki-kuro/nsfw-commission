@@ -4,10 +4,9 @@ import { CommissionInfoProps } from './types'
 // Create a functional component named IllustratorInfo which takes in props of type CommissionInfoProps
 const IllustratorInfo = ({ PublishDate, Creator, Twitter, Skeb, Pixiv }: CommissionInfoProps) => {
   // Format the date to YYYY/MM/DD
-  const Year = PublishDate.slice(0, 4)
-  const Month = PublishDate.slice(4, 6)
-  const Day = PublishDate.slice(6, 8)
-  const formattedDate = `${Year}/${Month}/${Day}`
+
+  const formattedDate =
+    PublishDate.slice(0, 4) + '/' + PublishDate.slice(4, 6) + '/' + PublishDate.slice(6, 8)
 
   // Create a reusable function to generate links with proper styling
   const createLink = (url: string, text: string) => {
