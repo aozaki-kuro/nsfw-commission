@@ -3,9 +3,7 @@ import Link from 'next/link'
 
 const YEAR = new Date().getFullYear()
 
-// Nextra blog theme config
-// eslint-disable-next-line import/no-anonymous-default-export
-export default {
+const NextraThemeConfig = {
   head: CustomHead,
 
   footer: (
@@ -23,3 +21,5 @@ export default {
     </div>
   ),
 }
+
+export default NextraThemeConfig
