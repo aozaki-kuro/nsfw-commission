@@ -40,10 +40,8 @@ export default function App({ Component, pageProps }) {
       `}</style>
 
       {/* Normal part*/}
-      <main className="font-sans">
-        <Component {...pageProps} />
-        <CustomAnalytics />
-      </main>
+      <Component {...pageProps} />
+      <CustomAnalytics />
     </>
 
 )
