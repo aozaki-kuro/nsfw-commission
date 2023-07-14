@@ -20,6 +20,9 @@ const IllustratorInfo = ({ PublishDate, Creator, Twitter, Skeb, Pixiv }: Commiss
     ) : null
   }
 
+  // Check if the input is null or empty
+  const isAllLinksEmpty = !Twitter && !Skeb && !Pixiv
+
   // Render illustrator information in a grid layout using Tailwind CSS and the Transition component from HeadlessUI. This includes the formattedDate state, Creator prop (or '-' if there is no Creator), and links to the illustrator's social media pages (if they exist).
   return (
     <div className="flex flex-auto font-mono text-sm ss:text-xs">
@@ -29,9 +32,15 @@ const IllustratorInfo = ({ PublishDate, Creator, Twitter, Skeb, Pixiv }: Commiss
       <span className="grow text-right">
         {'['}
         <span className="pr-3 ss:pr-2" />
-        {createLink(Twitter, 'Twitter')}
-        {createLink(Pixiv, 'Pixiv')}
-        {createLink(Skeb, 'Skeb')}
+        {isAllLinksEmpty ? (
+          <span className="pr-3 ss:pr-2">N/A</span>
+        ) : (
+          <>
+            {createLink(Twitter, 'Twitter')}
+            {createLink(Pixiv, 'Pixiv')}
+            {createLink(Skeb, 'Skeb')}
+          </>
+        )}
         {']'}
       </span>
     </div>
