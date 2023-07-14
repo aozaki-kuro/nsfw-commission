@@ -16,7 +16,7 @@
     "@headlessui/react": "^1.7.15",
     "autoprefixer": "^10.4.14",
     "dotenv": "^16.3.1",
-    "next": "13.4.9",
+    "next": "13.4.10",
     "nextra": "2.10.0",
     "nextra-theme-blog": "2.10.0",
     "postcss": "^8.4.25",
